@@ -13,5 +13,5 @@ async def analyze(
 
 @app.post("/read")
 async def read(image: UploadFile = File(...)):
-    number = read_number(image)
+    number = await read_number(image)
     return number

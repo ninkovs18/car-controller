@@ -53,34 +53,71 @@ Do not add anything else outside the JSON.
 
 """)
 
-def build_ocr_prompt() -> str:
+
+def build_rotation_prompt() -> str:
     return textwrap.dedent("""
     Task:
-    You are a highly accurate OCR assistant. Your job is to extract either a **Vehicle Identification Number (VIN)** or a **mileage reading** from the provided image. Your core task is to **ensure absolute accuracy and correct character sequence** in the final output.
+    You are an assistant specialized in analyzing image orientation. Your sole task is to determine the exact rotation of the text within the provided image.
 
-    Rules for Extraction:
-    1.  **Image Orientation:** First, identify the correct orientation of the image. If the image is rotated, mentally rotate it to the correct, upright position for proper transcription.
-    2.  **Prioritize VIN Extraction:**
-        -   Check if the image contains a VIN. A VIN is a unique, **17-character alphanumeric string** (excluding the letters I, O, and Q) typically found on a vehicle's identification plate.
-        -   If a VIN is found, extract the complete 17-character string.
-    3.  **If no VIN, extract Mileage Reading:**
-        -   If no VIN is found, look for a mileage reading. This will be a numerical value, usually followed by "km" or "miles", or displayed clearly on a dashboard.
-        -   **Crucial for Mileage:** Extract ONLY the digits of the mileage. Do NOT include any commas, periods, spaces, or text (like "km" or "miles"). The extracted mileage should be a continuous string of numbers.
-
-    General Principle:
-    You must be extremely careful to transcribe every character and number **in the correct order**. Before returning a result, **carefully review the sequence** of characters to ensure it matches the image precisely, without any additions, omissions, or transpositions. Take all the time you need to be certain.
+    Rules:
+    -   Analyze the text to determine its orientation relative to an upright, human-readable position.
+    -   Match the orientation to one of the following four values:
+        -   **0**: The text is upright and flows from left to right. This is the correct, default orientation.
+        -   **180**: The text is completely upside down.
+        -   **90**: The text is rotated 90 degrees clockwise (to the right).
+        -   **-90**: The text is rotated 90 degrees counter-clockwise (to the left).
 
     Output format (strict):
-    You must return a JSON object with two keys: "type" and "value".
+    Return a single JSON object with a key "rotation" and a value representing the rotation in degrees. The only valid values are 0, 90, 180, or -90.
 
-    -   If a **VIN** is found, set "type" to "vin" and "value" to the 17-character VIN string.
-    -   If **mileage** is found, set "type" to "mileage" and "value" to the continuous string of numerical digits.
-
-    Example VIN output:
-    { "type": "vin", "value": "WAUZZZF49HA036784" }
-
-    Example mileage output:
-    { "type": "mileage", "value": "125500" }
+    Example outputs:
+    -   Upright text: { "rotation": 0 }
+    -   Upside-down text: { "rotation": 180 }
+    -   Left-rotated text: { "rotation": -90 }
+    -   Right-rotated text: { "rotation": 90 }
     
     Return only this JSON object. Do not include any explanation or text outside of the JSON.
+    """)
+
+
+
+def build_ocr_prompt() -> str:
+    return textwrap.dedent("""
+  You are an AI specialized in reading text from car images. 
+Each input will contain an image that shows EITHER:
+1. The car's VIN number (Vehicle Identification Number) 
+OR 
+2. The car's mileage (odometer reading).
+
+Your task:
+- Carefully analyze the image and determine which type of information it contains.
+- If the image contains a VIN number, return it under `"type": "vin"`.
+- If the image contains a mileage (odometer reading), return it under `"type": "mileage"`.
+- VIN numbers are usually alphanumeric strings (17 characters, uppercase letters and digits, no spaces).
+- Mileage values are numeric, sometimes with commas, dots, or the unit "km" or "miles".
+
+Examples:
+- If the image shows: `1HGCM82633A123456`
+  Output: { "type": "vin", "value": "1HGCM82633A123456" }
+
+- If the image shows: `234,567 km`
+  Output: { "type": "mileage", "value": "234567 km" }
+
+- If the image shows: `120045 miles`
+  Output: { "type": "mileage", "value": "120045 miles" }
+
+- If the image shows: `WAUZZZ8V9GA123456`
+  Output: { "type": "vin", "value": "WAUZZZ8V9GA123456" }
+
+Rules:
+- Always return ONLY a valid JSON object.
+- Do not add explanations or extra text, just JSON.
+- If the value is not perfectly clear, still return your best guess based on the image.
+
+Output format:
+{
+  "type": "vin" | "mileage",
+  "value": "<the extracted text>"
+}
+
     """)

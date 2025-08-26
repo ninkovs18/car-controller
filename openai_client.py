@@ -20,8 +20,8 @@ def analyze_car_angle(question: str, image: UploadFile):
 
     return answer
 
-def read_number(image: UploadFile):
-    extracted_number = get_number_from_image(client, image)
+async def read_number(image: UploadFile):
+    extracted_number = await get_number_from_image(client, image)
     return extracted_number
 
 
