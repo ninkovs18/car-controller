@@ -28,10 +28,11 @@ Rules:
 - If the car’s nose is pointing diagonally toward the bottom-left corner, return "down_left".
 - If the car’s nose is pointing diagonally toward the bottom-right corner, return "down_right".
 
+
 Important notes:
-- The "nose" of the car is the FRONT end (headlights, grille, bumper). Never confuse it with the rear.
+- The nose of the car is the FRONT end (headlights, grille, bumper). Never confuse it with the rear.
 - Output only one of the 8 possible values. Nothing else is valid.
-- Do NOT return "center" or "center_back" or any other word.
+- If the nose of the car is looking at the camera, you have to return "down".
 
 Output format (strict):
 
@@ -43,8 +44,7 @@ Return only this JSON object. Do not include any explanation or text outside of 
 
 
     response_image = client.chat.completions.create(
-        model="gpt-4o",
-        temperature=0,
+        model="gpt-5-2025-08-07",
         messages=[
              {"role": "system", "content": system_prompt_image},
              {
@@ -97,14 +97,14 @@ Respond only in JSON format as follows:
 }}
 
 - If the user's statement is correct, the value should be "Correct."
-- If the user's statement is incorrect, the value should be "Incorrect. The correct information is: {truth}"
+- If the user's statement is incorrect, the value should be "Incorrect. {truth}"
 
 Do not add anything else outside the JSON.
 
 """
     
     response_question = client.chat.completions.create(
-        model="gpt-4o",
+        model="gpt-4o-mini-2024-07-18",
         temperature=0,
         messages=[
              {
