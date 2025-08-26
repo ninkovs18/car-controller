@@ -10,3 +10,8 @@ async def analyze(
 ):
     answer = analyze_car_angle(question, image)
     return answer
+
+@app.post("/read")
+async def read(file: UploadFile = File(...)):
+    # TODO: dodati logiku za OCR i automatsko prepoznavanje
+    return ""

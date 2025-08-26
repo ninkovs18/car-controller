@@ -19,5 +19,8 @@ def analyze_car_angle(question: str, image: UploadFile):
 
     return answer
 
+def read_number(image: UploadFile):
+    return ""
+
 
 
