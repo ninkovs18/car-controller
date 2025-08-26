@@ -1,5 +1,5 @@
 from fastapi import FastAPI, File, Form, UploadFile
-from utils.openai_client import ask_question_with_image
+from openai_client import analyze_car_angle
 
 app = FastAPI()
 
@@ -8,5 +8,5 @@ async def analyze(
     question: str = Form(...),
     image: UploadFile = File(...)
 ):
-    answer = ask_question_with_image(question, image)
+    answer = analyze_car_angle(question, image)
     return answer
