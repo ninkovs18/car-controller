@@ -52,3 +52,35 @@ Respond only in JSON format as follows:
 Do not add anything else outside the JSON.
 
 """)
+
+def build_ocr_prompt() -> str:
+    return textwrap.dedent("""
+    Task:
+    You are a highly accurate OCR assistant. Your job is to extract either a **Vehicle Identification Number (VIN)** or a **mileage reading** from the provided image. Your core task is to **ensure absolute accuracy and correct character sequence** in the final output.
+
+    Rules for Extraction:
+    1.  **Image Orientation:** First, identify the correct orientation of the image. If the image is rotated, mentally rotate it to the correct, upright position for proper transcription.
+    2.  **Prioritize VIN Extraction:**
+        -   Check if the image contains a VIN. A VIN is a unique, **17-character alphanumeric string** (excluding the letters I, O, and Q) typically found on a vehicle's identification plate.
+        -   If a VIN is found, extract the complete 17-character string.
+    3.  **If no VIN, extract Mileage Reading:**
+        -   If no VIN is found, look for a mileage reading. This will be a numerical value, usually followed by "km" or "miles", or displayed clearly on a dashboard.
+        -   **Crucial for Mileage:** Extract ONLY the digits of the mileage. Do NOT include any commas, periods, spaces, or text (like "km" or "miles"). The extracted mileage should be a continuous string of numbers.
+
+    General Principle:
+    You must be extremely careful to transcribe every character and number **in the correct order**. Before returning a result, **carefully review the sequence** of characters to ensure it matches the image precisely, without any additions, omissions, or transpositions. Take all the time you need to be certain.
+
+    Output format (strict):
+    You must return a JSON object with two keys: "type" and "value".
+
+    -   If a **VIN** is found, set "type" to "vin" and "value" to the 17-character VIN string.
+    -   If **mileage** is found, set "type" to "mileage" and "value" to the continuous string of numerical digits.
+
+    Example VIN output:
+    { "type": "vin", "value": "WAUZZZF49HA036784" }
+
+    Example mileage output:
+    { "type": "mileage", "value": "125500" }
+    
+    Return only this JSON object. Do not include any explanation or text outside of the JSON.
+    """)

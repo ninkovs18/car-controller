@@ -1,5 +1,5 @@
 from fastapi import FastAPI, File, Form, UploadFile
-from openai_client import analyze_car_angle
+from openai_client import analyze_car_angle, read_number
 
 app = FastAPI()
 
@@ -12,6 +12,6 @@ async def analyze(
     return answer
 
 @app.post("/read")
-async def read(file: UploadFile = File(...)):
-    # TODO: dodati logiku za OCR i automatsko prepoznavanje
-    return ""
+async def read(image: UploadFile = File(...)):
+    number = read_number(image)
+    return number
