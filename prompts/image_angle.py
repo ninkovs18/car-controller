@@ -94,17 +94,17 @@ Your task:
 - If the image contains a VIN number, return it under `"type": "vin"`.
 - If the image contains a mileage (odometer reading), return it under `"type": "mileage"`.
 - VIN numbers are usually alphanumeric strings (17 characters, uppercase letters and digits, no spaces).
-- Mileage values are numeric, sometimes with commas, dots, or the unit "km" or "miles".
+- Mileage values are numeric, sometimes with commas, dots, or the unit "km" or "miles". But you only return the number
 
 Examples:
 - If the image shows: `1HGCM82633A123456`
   Output: { "type": "vin", "value": "1HGCM82633A123456" }
 
 - If the image shows: `234,567 km`
-  Output: { "type": "mileage", "value": "234567 km" }
+  Output: { "type": "mileage", "value": "234567" }
 
 - If the image shows: `120045 miles`
-  Output: { "type": "mileage", "value": "120045 miles" }
+  Output: { "type": "mileage", "value": "120045" }
 
 - If the image shows: `WAUZZZ8V9GA123456`
   Output: { "type": "vin", "value": "WAUZZZ8V9GA123456" }
