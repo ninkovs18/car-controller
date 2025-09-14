@@ -1,6 +1,6 @@
 from openai import OpenAI
 import json
-from prompts.image_angle import  build_question_prompt
+from prompts.prompt_builder import  build_question_prompt
 
 def get_final_answer(client: OpenAI, question: str, truth: str) -> str:
     system_prompt_question = build_question_prompt(question, truth)

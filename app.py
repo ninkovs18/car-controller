@@ -1,5 +1,6 @@
 from fastapi import FastAPI, File, Form, UploadFile
-from openai_client import analyze_car_angle, read_number
+from ai_clients import analyze_car_angle, read_mileage, read_vin
+from utils.read_file import read_bytes
 
 app = FastAPI()
 
@@ -11,7 +12,14 @@ async def analyze(
     answer = analyze_car_angle(question, image)
     return answer
 
-@app.post("/read")
+@app.post("/read_mileage")
 async def read(image: UploadFile = File(...)):
-    number = await read_number(image)
-    return number
+    image_bytes = await read_bytes(image)
+    mileage = await read_mileage(image_bytes)
+    return mileage
+
+@app.post("/read_vin")
+async def read(image: UploadFile = File(...)):
+    image_bytes = await read_bytes(image)
+    vin = await read_vin(image_bytes)
+    return vin

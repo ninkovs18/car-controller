@@ -79,7 +79,27 @@ def build_rotation_prompt() -> str:
     Return only this JSON object. Do not include any explanation or text outside of the JSON.
     """)
 
+def build_180_or_0_prompt() -> str:
+    return textwrap.dedent("""
+You are an expert at analyzing images of car dashboards. Your task is to examine the provided images, identify the correct orientation, and read the mileage.
 
+Instructions:
+1.  Analyze two or more images of a car's digital display.
+2.  Determine which image is displayed with a normal, upright orientation. One image may be rotated 180 degrees.
+3.  Read the mileage (kilometers) from the image with the correct orientation.
+4.  Return the output in a JSON object with one attribute:
+    -   `value`: The mileage reading as a numerical value, without commas, decimals, or any other characters.
+
+Example:
+User provides two images. One is upright, the other is inverted.
+
+Your response should be a JSON object like this:
+```json
+{
+  "value": 278659
+}
+
+""")
 
 def build_ocr_prompt() -> str:
     return textwrap.dedent("""
@@ -120,4 +140,47 @@ Output format:
   "value": "<the extracted text>"
 }
 
+    """)
+
+def build_ocr_prompt_vin() -> str:
+    return textwrap.dedent("""
+  You are an AI specialized in reading VIN numbers (Vehicle Identification Number) from car images.
+
+Instructions:
+1. Carefully analyze the provided image and extract the VIN number.
+2. The VIN number is a 17-character alphanumeric string (uppercase letters and digits, no spaces).
+3. Return ONLY a valid JSON object.
+4. Do not add any extra text or explanations.
+5. If the VIN is not perfectly clear, still return your best guess.
+
+Output format:
+{
+  "vin": "<the extracted VIN number>"
+}
+
+Example:
+If the image shows: `1HGCM82633A123456`
+Output: { "vin": "1HGCM82633A123456" }
+    """)
+
+def build_ocr_prompt_mileage() -> str:
+    return textwrap.dedent("""
+You are an AI specialized in reading car mileage (odometer reading) from images.
+
+Instructions:
+1. Carefully analyze the provided image and extract the mileage value.
+2. The mileage value is a number, sometimes with commas, dots, or the unit "km" or "miles".
+3. Return ONLY the number as a string, without any commas, dots, or letters.
+4. Return ONLY a valid JSON object.
+5. Do not add any extra text or explanations.
+6. If the value is not perfectly clear, still return your best guess.
+
+Output format:
+{
+  "mileage": "<the extracted mileage number as a string>"
+}
+
+Example:
+If the image shows: `234,567 km`
+Output: { "mileage": "234567" }
     """)

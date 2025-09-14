@@ -3,7 +3,7 @@ import json
 from fastapi import UploadFile
 from io import BytesIO
 import base64
-from prompts.image_angle import build_angle_prompt
+from prompts.prompt_builder import build_angle_prompt
 
 def get_car_direction(client: OpenAI, image: UploadFile) -> str:
     
