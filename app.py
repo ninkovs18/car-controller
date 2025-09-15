@@ -13,13 +13,13 @@ async def analyze(
     return answer
 
 @app.post("/read_mileage")
-async def read_mileage(image: UploadFile = File(...)):
+async def read_mileage_endpoint(image: UploadFile = File(...)):
     image_bytes = await read_bytes(image)
     mileage = await read_mileage(image_bytes)
     return mileage
 
 @app.post("/read_vin")
-async def read_vin(image: UploadFile = File(...)):
+async def read_vin_endpoint(image: UploadFile = File(...)):
     image_bytes = await read_bytes(image)
     vin = await read_vin(image_bytes)
     return vin
