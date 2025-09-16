@@ -21,7 +21,12 @@ def analyze_car_angle(question: str, image: UploadFile):
 
     truth = NOSE_POINTS_MAP.get(nose_points, "")
 
-    answer = get_final_answer(client, question, truth)
+    result = get_final_answer(client, question, truth)
+
+    answer = {
+    "result": result,
+    "message": truth if result == "Incorrect" else ""
+    }       
 
     return answer
 

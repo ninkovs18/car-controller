@@ -43,11 +43,11 @@ Check if the user's statement is correct based on the known truth.
 Respond only in JSON format as follows:
 
 {{
-  "answer": "Correct." 
+  "result": "Correct|Incorrect" 
 }}
 
-- If the user's statement is correct, the value should be "Correct."
-- If the user's statement is incorrect, the value should be "Incorrect. {truth}"
+- If the user's statement is correct, the result should be "Correct."
+- If the user's statement is incorrect, the result should be "Incorrect."
 
 Do not add anything else outside the JSON.
 

@@ -22,4 +22,4 @@ def get_final_answer(client: OpenAI, question: str, truth: str) -> str:
 
     response_question_json = json.loads(question_answer)
 
-    return response_question_json["answer"]
+    return response_question_json["result"]
