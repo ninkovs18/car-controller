@@ -217,6 +217,18 @@ select:focus {
 .result.fail {
   border-color: rgba(248, 113, 113, 0.5);
 }
+.result-primary {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.result-secondary {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
 .copy {
   margin-left: 8px;
 }

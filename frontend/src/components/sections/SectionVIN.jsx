@@ -65,7 +65,7 @@ export function SectionVIN() {
         {value && (
           <ResultCard
             title="VIN"
-            result={
+            primary={
               <div>
                 <strong>{value}</strong>
                 <CopyButton text={value} />

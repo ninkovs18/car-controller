@@ -65,7 +65,7 @@ export function SectionMileage() {
         {value && (
           <ResultCard
             title="Mileage"
-            result={
+            primary={
               <div>
                 <strong>{value}</strong>
                 <CopyButton text={value} />

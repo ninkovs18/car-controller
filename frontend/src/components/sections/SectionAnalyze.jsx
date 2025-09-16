@@ -51,11 +51,12 @@ export function SectionAnalyze() {
     setAnswer(null);
   }
 
-  const kind = answer?.startsWith("Correct")
-    ? "ok"
-    : answer?.startsWith("Incorrect")
-    ? "warn"
-    : "neutral";
+  const kind =
+    answer?.result === "Correct"
+      ? "ok"
+      : answer?.result === "Incorrect"
+      ? "warn"
+      : "neutral";
 
   return (
     <div className="card">
@@ -99,7 +100,12 @@ export function SectionAnalyze() {
         </div>
         {loading && <p>Processing request. This may take up to a minute.</p>}
         {answer && (
-          <ResultCard title="Result" result={<div>{answer}</div>} kind={kind} />
+          <ResultCard
+            title="Result"
+            kind={kind}
+            primary={answer.result}
+            secondary={answer.message}
+          />
         )}
       </form>
     </div>
