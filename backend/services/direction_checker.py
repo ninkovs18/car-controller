@@ -2,10 +2,11 @@ from openai import OpenAI
 import json
 from prompts.prompt_builder import  build_question_prompt
 
-def get_final_answer(client: OpenAI, question: str, truth: str) -> str:
-    system_prompt_question = build_question_prompt(question, truth)
+async def get_final_answer(client: OpenAI, question: str, truth: str) -> str:
+    try:
+        system_prompt_question = build_question_prompt(question, truth)
     
-    response_question = client.chat.completions.create(
+        response_question = client.chat.completions.create(
         model="gpt-4o-mini-2024-07-18",
         temperature=0,
         messages=[
@@ -16,10 +17,13 @@ def get_final_answer(client: OpenAI, question: str, truth: str) -> str:
             ]
         }],
         response_format={"type": "json_object"}
-    )
+        )
 
-    question_answer = response_question.choices[0].message.content
+        question_answer = response_question.choices[0].message.content
 
-    response_question_json = json.loads(question_answer)
+        response_question_json = json.loads(question_answer)
 
-    return response_question_json["result"]
+        return response_question_json["result"]
+    
+    except Exception as e:
+        raise RuntimeError(f"AI verify failed: {e}")

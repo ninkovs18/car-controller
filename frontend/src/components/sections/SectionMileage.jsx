@@ -24,7 +24,7 @@ export function SectionMileage() {
       const res = await readMileage(file);
       // if (res.type !== "mileage")
       //   throw new Error("API did not return mileage.");
-      setValue(res);
+      setValue(res.value);
     } catch (err) {
       setError(err?.message ?? "Failed to read mileage.");
     } finally {

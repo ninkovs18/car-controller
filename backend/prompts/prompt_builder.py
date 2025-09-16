@@ -101,47 +101,6 @@ Your response should be a JSON object like this:
 
 """)
 
-def build_ocr_prompt() -> str:
-    return textwrap.dedent("""
-  You are an AI specialized in reading text from car images. 
-Each input will contain an image that shows EITHER:
-1. The car's VIN number (Vehicle Identification Number) 
-OR 
-2. The car's mileage (odometer reading).
-
-Your task:
-- Carefully analyze the image and determine which type of information it contains.
-- If the image contains a VIN number, return it under `"type": "vin"`.
-- If the image contains a mileage (odometer reading), return it under `"type": "mileage"`.
-- VIN numbers are usually alphanumeric strings (17 characters, uppercase letters and digits, no spaces).
-- Mileage values are numeric, sometimes with commas, dots, or the unit "km" or "miles". But you only return the number
-
-Examples:
-- If the image shows: `1HGCM82633A123456`
-  Output: { "type": "vin", "value": "1HGCM82633A123456" }
-
-- If the image shows: `234,567 km`
-  Output: { "type": "mileage", "value": "234567" }
-
-- If the image shows: `120045 miles`
-  Output: { "type": "mileage", "value": "120045" }
-
-- If the image shows: `WAUZZZ8V9GA123456`
-  Output: { "type": "vin", "value": "WAUZZZ8V9GA123456" }
-
-Rules:
-- Always return ONLY a valid JSON object.
-- Do not add explanations or extra text, just JSON.
-- If the value is not perfectly clear, still return your best guess based on the image.
-
-Output format:
-{
-  "type": "vin" | "mileage",
-  "value": "<the extracted text>"
-}
-
-    """)
-
 def build_ocr_prompt_vin() -> str:
     return textwrap.dedent("""
   You are an AI specialized in reading VIN numbers (Vehicle Identification Number) from car images.
@@ -183,4 +142,59 @@ Output format:
 Example:
 If the image shows: `234,567 km`
 Output: { "mileage": "234567" }
+    """)
+
+
+def build_car_detection_prompt() -> str:
+    return textwrap.dedent("""
+You are a fast image triage. Answer only JSON.
+
+Task: Decide if the image shows the EXTERIOR of exactly ONE PASSENGER VEHICLE
+(e.g., car, SUV, van, minivan, small crossover), suitable for angle/orientation analysis,
+even if only a substantial portion of that single vehicle is visible.
+
+TRUE if:
+- The image contains exactly one passenger vehicle exterior, and
+- It may be partially cropped or occluded, as long as it is unambiguously the exterior of a single passenger vehicle.
+  Accept close views such as: front bumper + headlight/grille, fender + wheel/door panel, rear lamps + bumper.
+
+FALSE if the image shows:
+- More than one vehicle (even if all are passenger vehicles),
+- Interiors (dashboard, instrument cluster/odometer, seats),
+- License-plate close-ups with no surrounding body context,
+- Motorcycles, bicycles,
+- Buses, trucks, trailers, heavy machinery,
+- Toys, models, drawings, renderings,
+- Or the view is so close/blurred that you cannot tell it’s the exterior of a passenger vehicle.
+
+Output (strict):
+{ "is_passenger_vehicle": true|false }
+
+    """)
+
+def build_vin_detection_prompt() -> str:
+    return textwrap.dedent("""
+You are a fast image triage. Answer only JSON.
+
+Task: Decide if the image contains a VIN label/plate or a VIN string (17 chars, uppercase letters & digits, no I/O/Q).
+
+Signals for true: metal/plastic VIN plate, windshield corner VIN tag, door jamb sticker with long alphanumeric code.
+False: odometer, random stickers, license plate, mileage numbers.
+
+Return ONLY:
+{ "has_vin": true|false }
+    """)
+
+def build_mileage_detection_prompt() -> str:
+    return textwrap.dedent("""
+You are a fast image triage. Answer only JSON.
+
+Task: Decide if the image shows an odometer / instrument cluster (digital 7-segment or analog dials) suitable for mileage OCR.
+
+True if: gauge cluster, odometer display, dashboard with mileage readout.
+False if: car exterior, VIN plate, license plate, random text.
+
+Return ONLY:
+{ "is_odometer": true|false }
+
     """)
