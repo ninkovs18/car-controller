@@ -1,0 +1,40 @@
+steps:
+  # Build Docker image iz foldera backend
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/car-controller",
+        "./backend",
+      ]
+
+  # Push image na Artifact Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/car-controller",
+      ]
+
+  # Deploy na Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      [
+        "run",
+        "deploy",
+        "car-controller",
+        "--image",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/car-controller",
+        "--region",
+        "europe-west1",
+        "--platform",
+        "managed",
+        "--allow-unauthenticated",
+        "--port",
+        "8080",
+      ]
+
+images:
+  - "europe-west1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/car-controller"
