@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import "./styles.css";
 import { Accordion } from "./components/Accordion";
 import { SectionAnalyze } from "./components/sections/SectionAnalyze";
@@ -6,35 +6,46 @@ import { SectionMileage } from "./components/sections/SectionMileage";
 import { SectionVIN } from "./components/sections/SectionVIN";
 
 export default function App() {
+  const [openId, setOpenId] = useState(null);
+
   const items = [
     { id: "analyze", title: "Analyze angle", content: <SectionAnalyze /> },
     { id: "mileage", title: "Read mileage", content: <SectionMileage /> },
     { id: "vin", title: "Read VIN", content: <SectionVIN /> },
   ];
 
-  function scrollTo(id) {
+  useEffect(() => {
+    const hash = window.location.hash.replace("#", "");
+    if (hash && items.some((item) => item.id === hash)) {
+      setOpenId(hash);
+    } else if (items[0]) {
+      setOpenId(items[0].id);
+    }
+  }, []);
+
+  function toggleAndScroll(id) {
+    setOpenId(id); // <--- Menja stanje
     const el = document.getElementById(id);
     if (!el) return;
     el.scrollIntoView({ behavior: "smooth", block: "start" });
     history.replaceState(null, "", `#${id}`);
   }
-
   return (
     <>
       <header className="header">
         <div className="header-inner">
           <h1>Car Controller</h1>
           <div className="nav">
-            <button onClick={() => scrollTo("analyze")}>Analyze</button>
-            <button onClick={() => scrollTo("mileage")}>Mileage</button>
-            <button onClick={() => scrollTo("vin")}>VIN</button>
+            <button onClick={() => toggleAndScroll("analyze")}>Analyze</button>
+            <button onClick={() => toggleAndScroll("mileage")}>Mileage</button>
+            <button onClick={() => toggleAndScroll("vin")}>VIN</button>
           </div>
         </div>
       </header>
 
       <main className="container">
         <div className="stack">
-          <Accordion items={items} initialOpenId="analyze" />
+          <Accordion items={items} openId={openId} setOpenId={setOpenId} />
         </div>
       </main>
     </>

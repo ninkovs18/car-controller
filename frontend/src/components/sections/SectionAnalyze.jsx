@@ -61,26 +61,25 @@ export function SectionAnalyze() {
   return (
     <div className="card">
       <h2>Analyze angle</h2>
-      <p>
-        Upload a car photo and select the expected angle. The API will confirm
-        or correct it.
-      </p>
+      <p>Upload a vehicle image and select the expected angle.</p>
 
       <form className="stack" onSubmit={onSubmit}>
         <ImagePicker file={file} onFile={setFile} />
 
         <div>
-          <label>
-            Expected angle
-            <select value={angle} onChange={handleSelectOption}>
-              <option value="">Select angle…</option>
-              {OPTIONS.map((opt) => (
-                <option key={opt} value={opt}>
-                  {OPTIONS_DISPLAY[opt]}
-                </option>
-              ))}
-            </select>
-          </label>
+          <label for="expected-angle-select">Expected angle</label>
+          <select
+            id="expected-angle-select"
+            value={angle}
+            onChange={handleSelectOption}
+          >
+            <option value="">Select angle…</option>
+            {OPTIONS.map((opt) => (
+              <option key={opt} value={opt}>
+                {OPTIONS_DISPLAY[opt]}
+              </option>
+            ))}
+          </select>
         </div>
 
         {error && <div className="alert error">{error}</div>}

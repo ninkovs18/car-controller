@@ -41,7 +41,7 @@ export function SectionMileage() {
   return (
     <div className="card">
       <h2>Read mileage</h2>
-      <p>Upload a photo of the odometer. The API returns a numeric value.</p>
+      <p>Upload the image containing the odometer.</p>
 
       <form className="stack" onSubmit={onSubmit}>
         <ImagePicker file={file} onFile={setFile} />

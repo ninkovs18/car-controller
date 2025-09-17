@@ -26,6 +26,11 @@ body {
   background: radial-gradient(1200px 800px at 20% -10%, #0f172a 0, #0b0f14 40%);
 }
 
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
 .container {
   max-width: 1080px;
   margin: 0 auto;
