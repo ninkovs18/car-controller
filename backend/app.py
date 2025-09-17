@@ -31,6 +31,10 @@ def err(status: int, code: str, message: str):
         content={"error": code, "message": message}
     )
 
+@app.get("/health")
+async def health_check():
+    return {"status": "ok"}
+
 @app.post("/analyze")
 async def analyze(
     question: str = Form(...),
