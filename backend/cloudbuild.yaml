@@ -1,5 +1,4 @@
 steps:
-  # Build Docker image iz foldera backend
   - name: "gcr.io/cloud-builders/docker"
     args:
       [
@@ -9,7 +8,6 @@ steps:
         "./backend",
       ]
 
-  # Push image na Artifact Registry
   - name: "gcr.io/cloud-builders/docker"
     args:
       [
@@ -17,7 +15,6 @@ steps:
         "europe-west1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/car-controller",
       ]
 
-  # Deploy na Cloud Run
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
     args:
@@ -38,3 +35,6 @@ steps:
 
 images:
   - "europe-west1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/car-controller"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
