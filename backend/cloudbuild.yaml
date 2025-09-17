@@ -29,8 +29,6 @@ steps:
         "--platform",
         "managed",
         "--allow-unauthenticated",
-        "--port",
-        "$PORT",
       ]
 
 images:
