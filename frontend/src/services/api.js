@@ -10,10 +10,10 @@ export async function analyzeImage(question, file) {
     return res.data;
   } catch (error) {
     console.error("Analyze failed", error);
-    if (error.response.status === 422) {
+    if (error?.response?.status === 422) {
       throw new Error(error.response.data.detail);
     }
-    throw new Error(`Analyze failed (${error.response.status})`);
+    throw new Error(`Analyze failed.`);
   }
 }
 
@@ -26,10 +26,10 @@ export async function readMileage(file) {
     return res.data;
   } catch (error) {
     console.error("Read mileage failed", error);
-    if (error.response.status === 422) {
+    if (error?.response?.status === 422) {
       throw new Error(error.response.data.detail);
     }
-    throw new Error(`Read mileage failed (${error.response.status})`);
+    throw new Error(`Read mileage failed.`);
   }
 }
 
@@ -42,9 +42,9 @@ export async function readVIN(file) {
     return res.data;
   } catch (error) {
     console.error("Read VIN failed", error);
-    if (error.response.status === 422) {
+    if (error?.response?.status === 422) {
       throw new Error(error.response.data.detail);
     }
-    throw new Error(`Read VIN failed (${error.response.status})`);
+    throw new Error(`Read VIN failed.`);
   }
 }

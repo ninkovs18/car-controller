@@ -67,7 +67,7 @@ export function SectionAnalyze() {
         <ImagePicker file={file} onFile={setFile} />
 
         <div>
-          <label for="expected-angle-select">Expected angle</label>
+          <label htmlFor="expected-angle-select">Expected angle</label>
           <select
             id="expected-angle-select"
             value={angle}
