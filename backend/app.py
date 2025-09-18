@@ -5,11 +5,18 @@ from utils.read_file import read_bytes
 from fastapi.responses import JSONResponse
 from fastapi import HTTPException
 import logging
+import os
 
 
 logging.basicConfig(level=logging.INFO)
 
-app = FastAPI()
+ENV = os.getenv("ENV", "dev")
+
+app = FastAPI(
+    docs_url=None if ENV == "prod" else "/docs",
+    redoc_url=None if ENV == "prod" else "/redoc",
+    openapi_url=None if ENV == "prod" else "/openapi.json",
+)
 
 origins = [
     "http://localhost:5173"
