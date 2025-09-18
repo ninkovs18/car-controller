@@ -1,18 +1,25 @@
+substitutions:
+  _REGION: europe-west1
+  _AR_REPO: vehicle-controller-repo
+  _IMAGE_NAME: backend
+  _SERVICE_NAME: vehicle-controller
+
 steps:
   - name: "gcr.io/cloud-builders/docker"
+    dir: "backend"
     args:
       [
         "build",
         "-t",
-        "europe-west1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/car-controller",
-        "./backend",
+        "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_IMAGE_NAME}:$COMMIT_SHA",
+        ".",
       ]
 
   - name: "gcr.io/cloud-builders/docker"
     args:
       [
         "push",
-        "europe-west1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/car-controller",
+        "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_IMAGE_NAME}:$COMMIT_SHA",
       ]
 
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
@@ -21,18 +28,20 @@ steps:
       [
         "run",
         "deploy",
-        "car-controller",
+        "${_SERVICE_NAME}",
         "--image",
-        "europe-west1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/car-controller",
+        "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_IMAGE_NAME}:$COMMIT_SHA",
         "--region",
-        "europe-west1",
+        "${_REGION}",
         "--platform",
         "managed",
         "--allow-unauthenticated",
+        "--port",
+        "8080",
       ]
 
 images:
-  - "europe-west1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/car-controller"
+  - "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_AR_REPO}/${_IMAGE_NAME}:$COMMIT_SHA"
 
 options:
   logging: CLOUD_LOGGING_ONLY
