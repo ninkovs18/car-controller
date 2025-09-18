@@ -4,6 +4,7 @@ import { Accordion } from "./components/Accordion";
 import { SectionAnalyze } from "./components/sections/SectionAnalyze";
 import { SectionMileage } from "./components/sections/SectionMileage";
 import { SectionVIN } from "./components/sections/SectionVIN";
+import { AuthButton } from "./components/AuthButton";
 
 export default function App() {
   const [openId, setOpenId] = useState(null);
@@ -39,6 +40,7 @@ export default function App() {
             <button onClick={() => toggleAndScroll("analyze")}>Analyze</button>
             <button onClick={() => toggleAndScroll("mileage")}>Mileage</button>
             <button onClick={() => toggleAndScroll("vin")}>VIN</button>
+            <AuthButton />
           </div>
         </div>
       </header>
