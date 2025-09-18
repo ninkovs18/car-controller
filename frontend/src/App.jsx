@@ -34,7 +34,7 @@ export default function App() {
     <>
       <header className="header">
         <div className="header-inner">
-          <h1>Car Controller</h1>
+          <h1>Vehicle Controller</h1>
           <div className="nav">
             <button onClick={() => toggleAndScroll("analyze")}>Analyze</button>
             <button onClick={() => toggleAndScroll("mileage")}>Mileage</button>
