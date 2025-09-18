@@ -1,5 +1,6 @@
-from fastapi import FastAPI, File, Form, UploadFile
+from fastapi import FastAPI, File, Form, UploadFile, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from auth.firebase import verify_firebase_token
 from ai_clients import analyze_car_angle, read_mileage, read_vin
 from utils.read_file import read_bytes
 from fastapi.responses import JSONResponse
@@ -45,7 +46,8 @@ async def health_check():
 @app.post("/analyze")
 async def analyze(
     question: str = Form(...),
-    image: UploadFile = File(...)
+    image: UploadFile = File(...),
+    user=Depends(verify_firebase_token)
 ):
     if not image:
         return err(400, "MISSING_FILE", "Image is required.")
@@ -70,7 +72,7 @@ async def analyze(
         return err(502, "AI_ERROR", f"Analyze failed: {e}")
 
 @app.post("/read_mileage")
-async def read_mileage_endpoint(image: UploadFile = File(...)):
+async def read_mileage_endpoint(image: UploadFile = File(...), user=Depends(verify_firebase_token)):
     if not image:
         return err(400, "MISSING_FILE", "Image is required.")
     if image.content_type and not image.content_type.startswith("image/"):
@@ -88,7 +90,7 @@ async def read_mileage_endpoint(image: UploadFile = File(...)):
         return err(502, "OCR_ERROR", f"Read mileage failed: {e}")
 
 @app.post("/read_vin")
-async def read_vin_endpoint(image: UploadFile = File(...)):
+async def read_vin_endpoint(image: UploadFile = File(...), user=Depends(verify_firebase_token)):
     if not image:
         return err(400, "MISSING_FILE", "Image is required.")
     if image.content_type and not image.content_type.startswith("image/"):
