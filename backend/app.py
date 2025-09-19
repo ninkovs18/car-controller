@@ -20,7 +20,8 @@ app = FastAPI(
 )
 
 origins = [
-    "http://localhost:5173"
+    "http://localhost:5173",
+    "https://vehicle-controller-3f208.web.app"
 ]
 
 app.add_middleware(
