@@ -6,12 +6,13 @@ import os
 
 FIREBASE_PROJECT_ID = os.getenv("FIREBASE_PROJECT_ID")
 bearer_scheme = HTTPBearer()
+request = grequests.Request()
 
 def verify_firebase_token(creds: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
     try:
         token = creds.credentials
-        info = id_token.verify_firebase_id_token(token, grequests.Request())
-        if info.get("aud") != FIREBASE_PROJECT_ID and info.get("firebase", {}).get("project_id") != FIREBASE_PROJECT_ID:
+        info = id_token.verify_firebase_token(token, request, audience=FIREBASE_PROJECT_ID)
+        if not info:
             raise ValueError("Invalid project")
         return info
     except Exception as e:
