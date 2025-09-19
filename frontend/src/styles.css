@@ -237,3 +237,9 @@ select:focus {
 .copy {
   margin-left: 8px;
 }
+
+.button.google-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

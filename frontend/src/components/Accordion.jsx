@@ -1,4 +1,6 @@
-export function Accordion({ items, openId, setOpenId }) {
+import { useState } from "react";
+export function Accordion({ items, initialOpenId }) {
+  const [openId, setOpenId] = useState(initialOpenId ?? items[0]?.id ?? null);
   const toggle = (id) => setOpenId((prev) => (prev === id ? null : id));
 
   return (

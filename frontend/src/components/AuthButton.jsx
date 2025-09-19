@@ -1,4 +1,3 @@
-// src/components/AuthButton.jsx
 import { useAuth } from "../context/auth/AuthProvider";
 
 export function AuthButton() {
