@@ -19,7 +19,7 @@ async def get_car_direction(client: OpenAI, image: UploadFile) -> str:
 
 
         response_image = client.chat.completions.create(
-        model="gpt-5-2025-08-07",
+        model="gpt-5",
         messages=[
              {"role": "system", "content": system_prompt_image},
              {
