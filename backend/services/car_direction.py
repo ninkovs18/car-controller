@@ -22,7 +22,7 @@ async def get_car_direction(client: OpenAI, image: UploadFile) -> str:
         model="gpt-5",
         reasoning_effort="high",
         messages=[
-             {"role": "system", "content": system_prompt_image},
+             {"role": "developer", "content": system_prompt_image},
              {
                 "role": "user",
                 "content": [
