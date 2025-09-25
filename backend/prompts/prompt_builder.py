@@ -2,32 +2,45 @@ import textwrap
 
 def build_angle_prompt() -> str:
     return textwrap.dedent("""
-Task:
-You are given an image of a car taken from eye-level perspective.
-Your job is to determine where the car’s nose (the front part of the car, where the headlights and license plate are located) is pointing relative to the image frame.
+# Role and Objective
+- The assistant receives an eye-level image of a car and determines the direction the car's nose (front end: headlights, grille, bumper) is pointing relative to the image frame.
 
-Rules:
+# Instructions
+- Begin with a concise checklist (3-7 bullets) of what you will do; keep items conceptual, not implementation-level.
+- Analyze the image, then classify and output the direction of the car's nose as one of 8 possible values: `left`, `right`, `up`, `down`, `up_left`, `up_right`, `down_left`, or `down_right`.
+- Only output the specified JSON response. No explanations, additional text, or formatting outside of this JSON.
 
-- If the car’s nose is pointing directly toward the left edge of the frame, return "left".
-- If the car’s nose is pointing directly toward the right edge of the frame, return "right".
-- If the car’s nose is pointing directly toward the top edge of the frame, return "up".
-- If the car’s nose is pointing directly toward the bottom edge of the frame, return "down".
-- If the car’s nose is pointing diagonally toward the top-left corner, return "up_left".
-- If the car’s nose is pointing diagonally toward the top-right corner, return "up_right".
-- If the car’s nose is pointing diagonally toward the bottom-left corner, return "down_left".
-- If the car’s nose is pointing diagonally toward the bottom-right corner, return "down_right".
+## Classification Rules
+- `left`: Car's nose points directly toward the left edge of the frame.
+- `right`: Car's nose points directly toward the right edge.
+- `up`: Car's nose points directly toward the top edge.
+- `down`: Car's nose points directly toward the bottom edge.
+- `up_left`: Diagonally toward the top-left corner.
+- `up_right`: Diagonally toward the top-right corner.
+- `down_left`: Diagonally toward the bottom-left corner.
+- `down_right`: Diagonally toward the bottom-right corner.
 
+## Refinement Rules (IMPORTANT)
+- For an initial label of `left` or `right`:
+  - Check if FRONT vehicle elements (headlight, front bumper, grille, fog light) are visible.
+  - Check if REAR vehicle elements (taillight, trunk, rear bumper, rear window) are visible.
+  - If strong FRONT cues: convert `left` to `down_left` or `right` to `down_right`.
+  - If strong REAR cues: convert `left` to `up_left` or `right` to `up_right`.
+  - Only output pure `left` or `right` when neither front nor rear cues are visible.
 
-Important notes:
-- The nose of the car is the FRONT end (headlights, grille, bumper). Never confuse it with the rear.
-- Output only one of the 8 possible values. Nothing else is valid.
-- If the nose of the car is looking at the camera, you have to return "down".
+## Output Format
+- The only valid output is the following JSON:
+```json
+{"nose_points": "left|right|up|down|up_left|up_right|down_left|down_right"}
+```
+- Strictly return just the JSON object with no extra commentary.
 
-Output format (strict):
+## Post-action Validation
+- After the direction classification, verify that the JSON is correctly formatted and strictly matches the accepted output schema before returning a response.
 
-{ "nose_points": "left|right|up|down|up_left|up_right|down_left|down_right" }
-
-Return only this JSON object. Do not include any explanation or text outside of the JSON.
+## Additional Notes
+- The 'nose' refers only to the front of the car (headlights, grille, bumper). Never confuse with the rear.
+- If the car's nose is facing the camera, return `down`.
 
 """)
 
