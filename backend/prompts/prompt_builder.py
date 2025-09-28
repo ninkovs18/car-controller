@@ -188,7 +188,6 @@ TRUE if:
   Accept close views such as: front bumper + headlight/grille, fender + wheel/door panel, rear lamps + bumper.
 
 FALSE if the image shows:
-- More than one vehicle (even if all are passenger vehicles),
 - Interiors (dashboard, instrument cluster/odometer, seats),
 - License-plate close-ups with no surrounding body context,
 - Motorcycles, bicycles,
