@@ -39,6 +39,14 @@ The assistant receives an eye-level image of a car and determines the direction 
 
 ---
 
+## Special Side View Rule
+- If the car is **clearly photographed from the side** (the profile view dominates, showing doors, side panels, side mirrors, wheels along one side),  
+  - Then return only `"left"` or `"right"` according to the classification rules,  
+  - Even if some **front** or **rear** elements (headlights, taillights) are partially visible.  
+- This ensures that pure side views are never misclassified as diagonal directions.  
+
+---
+
 ## Fallback Rules (Close-up Images Only)
 *(Apply only if the previous rules cannot resolve direction clearly and the image shows just a partial close-up of the car, where one portion dominates the frame.)*  
 
@@ -56,6 +64,7 @@ The assistant receives an eye-level image of a car and determines the direction 
 The only valid output is the following JSON:  
 ```json
 {"nose_points": "left|right|up|down|up_left|up_right|down_left|down_right"}
+
 
 
 """)
