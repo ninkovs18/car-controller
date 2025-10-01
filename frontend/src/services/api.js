@@ -9,7 +9,6 @@ export async function analyzeImage(question, file) {
     const res = await api.post("/analyze", fd);
     return res.data;
   } catch (error) {
-    console.error("Analyze failed", error);
     if (error?.response?.status === 422) {
       throw new Error(error.response.data.detail);
     }
@@ -25,7 +24,6 @@ export async function readMileage(file) {
     const res = await api.post("/read_mileage", fd);
     return res.data;
   } catch (error) {
-    console.error("Read mileage failed", error);
     if (error?.response?.status === 422) {
       throw new Error(error.response.data.detail);
     }
@@ -41,7 +39,6 @@ export async function readVIN(file) {
     const res = await api.post("/read_vin", fd);
     return res.data;
   } catch (error) {
-    console.error("Read VIN failed", error);
     if (error?.response?.status === 422) {
       throw new Error(error.response.data.detail);
     }

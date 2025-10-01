@@ -22,7 +22,6 @@ export function SectionVIN() {
     try {
       setLoading(true);
       const res = await readVIN(file);
-      console.log(res);
       // if (res.type !== "vin") throw new Error("API did not return VIN.");
       setValue(res.value);
     } catch (err) {
