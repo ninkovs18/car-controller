@@ -5,23 +5,23 @@ def build_angle_prompt() -> str:
 # Developer Prompt
 
 ## Role and Objective
-The assistant receives an eye-level image of a car and determines the direction the car's nose (front end: headlights, grille, bumper) is pointing relative to the image frame.
+The assistant receives an eye-level image of a vehicle and determines the direction the vehicle's nose (front end: headlights, grille, bumper) is pointing relative to the image frame.
 
 ---
 
 ## Instructions
 - Begin with a concise checklist (3–7 bullets) of what you will do; keep items conceptual, not implementation-level.  
-- Analyze the image, then classify and output the direction of the car's nose as one of 8 possible values:  
+- Analyze the image, then classify and output the direction of the vehicle's nose as one of 8 possible values:  
   `left`, `right`, `up`, `down`, `up_left`, `up_right`, `down_left`, `down_right`.  
 - Only output the specified JSON response. No explanations, additional text, or formatting outside of this JSON.  
 
 ---
 
 ## Classification Rules
-- `left`: Car's nose points directly toward the left edge of the frame.  
-- `right`: Car's nose points directly toward the right edge.  
-- `up`: Car's nose points directly toward the top edge.  
-- `down`: Car's nose points directly toward the bottom edge.  
+- `left`: Vehicle's nose points directly toward the left edge of the frame.  
+- `right`: Vehicle's nose points directly toward the right edge.  
+- `up`: Vehicle's nose points directly toward the top edge.  
+- `down`: Vehicle's nose points directly toward the bottom edge.  
 - `up_left`: Diagonally toward the top-left corner.  
 - `up_right`: Diagonally toward the top-right corner.  
 - `down_left`: Diagonally toward the bottom-left corner.  
@@ -40,7 +40,7 @@ The assistant receives an eye-level image of a car and determines the direction 
 ---
 
 ## Special Side View Rule
-- If the car is **clearly photographed from the side** (the profile view dominates, showing doors, side panels, side mirrors, wheels along one side),  
+- If the vehicle is **clearly photographed from the side** (the profile view dominates, showing doors, side panels, side mirrors, wheels along one side),  
   - Then return only `"left"` or `"right"` according to the classification rules,  
   - Even if some **front** or **rear** elements (headlights, taillights) are partially visible.  
 - This ensures that pure side views are never misclassified as diagonal directions.  
@@ -48,7 +48,7 @@ The assistant receives an eye-level image of a car and determines the direction 
 ---
 
 ## Fallback Rules (Close-up Images Only)
-*(Apply only if the previous rules cannot resolve direction clearly and the image shows just a partial close-up of the car, where one portion dominates the frame.)*  
+*(Apply only if the previous rules cannot resolve direction clearly and the image shows just a partial close-up of the vehicle, where one portion dominates the frame.)*  
 
 - If the visible portion is the **rear** of the vehicle:  
   - Positioned near the **right edge** of the frame → return `"up_right"`.  
@@ -64,7 +64,6 @@ The assistant receives an eye-level image of a car and determines the direction 
 The only valid output is the following JSON:  
 ```json
 {"nose_points": "left|right|up|down|up_left|up_right|down_left|down_right"}
-
 
 
 """)
@@ -187,12 +186,12 @@ def build_car_detection_prompt() -> str:
     return textwrap.dedent("""
 You are a fast image triage. Answer only JSON.
 
-Task: Decide if the image shows the EXTERIOR of exactly ONE PASSENGER VEHICLE
+Task: Decide if the image shows the EXTERIOR of PASSENGER VEHICLE
 (e.g., car, SUV, van, minivan, small crossover), suitable for angle/orientation analysis,
 even if only a substantial portion of that single vehicle is visible.
 
 TRUE if:
-- The image contains exactly one passenger vehicle exterior, and
+- The image contains passenger vehicle exterior, and
 - It may be partially cropped or occluded, as long as it is unambiguously the exterior of a single passenger vehicle.
   Accept close views such as: front bumper + headlight/grille, fender + wheel/door panel, rear lamps + bumper.
 
@@ -200,7 +199,6 @@ FALSE if the image shows:
 - Interiors (dashboard, instrument cluster/odometer, seats),
 - License-plate close-ups with no surrounding body context,
 - Motorcycles, bicycles,
-- Buses, trucks, trailers, heavy machinery,
 - Toys, models, drawings, renderings,
 - Or the view is so close/blurred that you cannot tell it’s the exterior of a passenger vehicle.
 
